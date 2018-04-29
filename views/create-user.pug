@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        title Create User
+    body
+        form(method="POST", action="/create")
+            div(class='inputs')
+                div
+                    label(for='name') Name
+                    input(id='name', name='name')
+                div
+                    label(for='email') Email Address
+                    input(id='email', name='email')
+                div
+                    label(for='age') Age
+                    input(id='age', name='age')
+                div
+                    input(type='submit', value='Create User')

@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        title User Manager
+        style
+            include includes/userList.css
+    body
+        h3 User Listing
+        a(href="/create") Create User
+        if userList.length === 0
+            div There are currently no users.
+        else
+            div(class='users')
+                each user in userList
+                    div(class='user')
+                        ul
+                            li Name:
+                                span= user.name
+
+                            li Email Address:
+                                span= user.email
+
+                            li Age:
+                                span= user.age
+                        a(href='/edit/' + user.uid) Edit User
+                        a(href='/delete/' + user.uid) Delete User
