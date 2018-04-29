@@ -16,6 +16,12 @@ html
                     label(for='searchUser') Search Users By Last Name:
                     input(id='searchUser', name='searchUser')
                     input(type='submit', value='Search')
+        div
+            span Alphebetize users by last name:
+            a(href="/userlist/alphabetized/asc") Ascending
+            span |
+            a(href="/userlist/alphabetized/desc") Descending
+
 
         if userList.length === 0
             div No users to show.

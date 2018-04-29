@@ -126,11 +126,23 @@ app.get('/delete/:userid', (req, res) => {
 });
 
 app.get('/userlist/alphabetized/asc', (req, res) => {
+    User.find().sort({lastName: 1}).then((users) => {
+        userArray = users;
 
+        res.render('user-listing', {
+            userList: userArray
+        });
+    });
 });
 
 app.get('/userlist/alphabetized/desc', (req, res) => {
+    User.find().sort({lastName: -1}).then((users) => {
+        userArray = users;
 
+        res.render('user-listing', {
+            userList: userArray
+        });
+    });
 });
 
 app.post('/userlist/search', (req, res) => {
