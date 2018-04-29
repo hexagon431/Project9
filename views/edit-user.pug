@@ -6,13 +6,16 @@ html
         form(method="POST", action="/update/" + editUser.uid)
             div(class='inputs')
                 div
-                    label(for='name') Name:
-                    input(id='name', name='name', value=editUser.name)
+                    label(for='firstName') Name:
+                    input(id='firstName', name='firstName', value=editUser.firstName, required)
+                div
+                    label(for='lastName') Last Name:
+                    input(id='lastName', name='lastName', value=editUser.lastName, required)
                 div
                     label(for='email') Email Address:
-                    input(id='email', name='email', value=editUser.email)
+                    input(id='email', name='email', value=editUser.email, required)
                 div
                     label(for='age') Age:
-                    input(id='age', name='age', value=editUser.age)
+                    input(id='age', name='age', value=editUser.age, required)
                 div
                     input(type='submit', value='Save Changes')

@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const path = require('path');
-//const mongo = require('mongodb');
-//const MongoClient = mongo.MongoClient;
 const Mongoose = require('mongoose');
 const dbUrl = "mongodb://localhost:27017/usermanage";
 
@@ -19,7 +17,6 @@ app.set('view engine', 'pug');
 
 let userIndex = 0;
 let userArray = [];
-//let selectedUserPosition;
 let User = null;
 
 Mongoose.connect(dbUrl);
@@ -30,7 +27,8 @@ db.once('open', () => {
 
     let userSchema = Mongoose.Schema({
         uid: Number,
-        name: String,
+        firstName: String,
+        lastName: String,
         email: String,
         age: Number
     });
@@ -40,7 +38,8 @@ db.once('open', () => {
     User.find((err, users) => {
         userArray = users;
 
-        userIndex = users[userArray.length - 1].uid + 1;
+        if (userArray.length > 9)
+            userIndex = users[userArray.length - 1].uid + 1;
     });
 });
 
@@ -55,16 +54,11 @@ app.get('/create', (req, res) => {
 app.post('/create', (req, res) => {
     let newUser = new User({
         uid:userIndex,
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         age: req.body.age
     });
-    // let user = {
-    //     uid: userIndex,
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     age: req.body.age
-    // };
 
     userIndex++;
 
@@ -75,8 +69,6 @@ app.post('/create', (req, res) => {
 
         res.redirect('/userlist');
     });
-
-    //users.push(user);
 });
 
 app.get('/userlist', (req, res) => {
@@ -105,23 +97,13 @@ app.get('/edit/:userid', (req, res) => {
             editUser: foundUser[0]
         });
     });
-    // let elementPosition;
-    //
-    // for(let i = 0; i <= users.length; i++){
-    //     if(users[i].uid == req.params.userid){
-    //         elementPosition = i;
-    //         break;
-    //     }
-    // }
-
-    // let user = users[elementPosition];
-    // selectedUserPosition = elementPosition;
 });
 
 app.post('/update/:userid', (req, res) => {
     User.update({uid: req.params.userid}, {$set: {
         uid: req.params.userid,
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         age: req.body.age
     }}, (err) => {
@@ -131,20 +113,6 @@ app.post('/update/:userid', (req, res) => {
 
         res.redirect('/userlist');
     });
-
-    // User.find({uid: req.params.userid}, (err, foundUser) => {
-    //     if (err) return console.error(err);
-    // });
-    // users[selectedUserPosition] = {
-    //     uid: req.params.userid,
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     age: req.body.age
-    // };
-    //
-    // selectedUserPosition = -1;
-
-
 });
 
 app.get('/delete/:userid', (req, res) => {
@@ -155,18 +123,26 @@ app.get('/delete/:userid', (req, res) => {
 
         res.redirect('/userlist');
     });
-    // let elementPosition;
-    //
-    // for(let i = 0; i <= users.length; i++){
-    //     if(users[i].uid == req.params.userid){
-    //         elementPosition = i;
-    //         break;
-    //     }
-    // }
-    // users.splice(elementPosition, 1);
+});
 
-
+app.get('/userlist/alphabetized/asc', (req, res) => {
 
 });
+
+app.get('/userlist/alphabetized/desc', (req, res) => {
+
+});
+
+app.post('/userlist/search', (req, res) => {
+    User.find({lastName: req.body.searchUser}, (err, results) => {
+        userArray = results;
+
+        res.render('user-listing', {
+            userList: userArray
+        });
+    })
+});
+
+
 
 app.listen(port);

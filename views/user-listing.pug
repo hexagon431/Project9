@@ -6,16 +6,29 @@ html
             include includes/userList.css
     body
         h3 User Listing
-        a(href="/create") Create User
+        div
+            a(href="/create") Create User
+        div
+            a(href="/userlist") Refresh User List
+        div(class='usersearch')
+            form(METHOD='POST', action='/userlist/search')
+                div
+                    label(for='searchUser') Search Users By Last Name:
+                    input(id='searchUser', name='searchUser')
+                    input(type='submit', value='Search')
+
         if userList.length === 0
-            div There are currently no users.
+            div No users to show.
         else
             div(class='users')
                 each user in userList
                     div(class='user')
                         ul
-                            li Name:
-                                span= user.name
+                            li First Name:
+                                span= user.firstName
+
+                            li Last Name:
+                                span= user.lastName
 
                             li Email Address:
                                 span= user.email
