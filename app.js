@@ -5,7 +5,7 @@ const path = require('path');
 //const mongo = require('mongodb');
 //const MongoClient = mongo.MongoClient;
 const Mongoose = require('mongoose');
-const dbUrl = "mongodb:https//localhost:27017/usermanage";
+const dbUrl = "mongodb://localhost:27017/usermanage";
 
 const app = express();
 const port = process.env.PORT | 3000;
@@ -40,7 +40,7 @@ db.once('open', () => {
     User.find((err, users) => {
         userArray = users;
 
-        userIndex = userArray.length;
+        userIndex = users[userArray.length - 1].uid + 1;
     });
 });
 
@@ -81,7 +81,7 @@ app.post('/create', (req, res) => {
 
 app.get('/userlist', (req, res) => {
 
-    User.find({uid: req.params.userid}, (err, users) => {
+    User.find((err, users) => {
         if (err) return console.error(err);
 
         userArray = users;
@@ -102,7 +102,7 @@ app.get('/edit/:userid', (req, res) => {
         console.log(`user ${req.params.userid} found and sent to edit page`);
 
         res.render('edit-user', {
-            editUser: foundUser
+            editUser: foundUser[0]
         });
     });
     // let elementPosition;
